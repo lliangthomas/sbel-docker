@@ -63,9 +63,9 @@ RUN wget https://bitbucket.org/blaze-lib/blaze/downloads/blaze-3.8.tar.gz \
   && rm -rf blaze*
 
 ############################################
-# Build Vanilla Chrono
+# Build Vanilla Chrono Release 8.0 without Tests
 ############################################
-RUN git clone --recursive https://github.com/projectchrono/chrono.git
+RUN git clone --recursive https://github.com/projectchrono/chrono.git -b release/8.0
 RUN cd chrono \
   && mkdir -p build \
   && cd build \
