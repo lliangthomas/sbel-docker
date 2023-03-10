@@ -49,7 +49,7 @@ RUN ln -s $NO_VNC_HOME/vnc_lite.html $NO_VNC_HOME/index.html
 # Install Chrono dependencies
 ############################################
 RUN apt-get update \ 
-  && apt-get -y install python cmake ninja-build build-essential libboost-dev swig libeigen3-dev \ 
+  && apt-get -y install cmake ninja-build build-essential libboost-dev swig libeigen3-dev \ 
   libglfw3-dev libglm-dev libglew-dev freeglut3-dev libirrlicht-dev \
   libxxf86vm-dev libopenmpi-dev python3 python3-dev libhdf5-dev libnvidia-gl-515 \
   && apt autoclean -y \
