@@ -10,8 +10,7 @@ EXPOSE $VNC_PORT $NO_VNC_PORT
 
 ENV HOME=/sbel \
     TERM=xterm \
-    STARTUPDIR=/sbel-start \
-    INST_SCRIPTS=/sbel/install \
+    STARTUPDIR=/start \
     NO_VNC_HOME=/noVNC \
     DEBIAN_FRONTEND=noninteractive \
     VNC_COL_DEPTH=24 \
@@ -22,7 +21,7 @@ WORKDIR $HOME
 # Install pre-requisite packages
 ############################################
 RUN apt-get update \ 
-  && apt-get -y install git wget net-tools bzip2 procps python3-numpy \
+  && apt-get install -y --no-install-recommends git wget net-tools bzip2 procps python3-numpy \
   && apt autoclean -y \
   && apt autoremove -y \
   && rm -rf /var/lib/apt/lists/*
@@ -31,7 +30,7 @@ RUN apt-get update \
 # Install XFCE
 ############################################
 RUN apt-get update \ 
-  && apt-get install -y supervisor xfce4 xfce4-terminal xterm dbus-x11 libdbus-glib-1-2 \
+  && apt-get install -y --no-install-recommends supervisor xfce4 xfce4-terminal xterm dbus-x11 libdbus-glib-1-2 \
   && apt-get purge -y pm-utils *screensaver* \
   && apt autoclean -y \
   && apt autoremove -y \
@@ -40,22 +39,22 @@ RUN apt-get update \
 ############################################
 # Install noVNC
 ############################################
-RUN mkdir -p $NO_VNC_HOME/utils/websockify
-RUN wget -qO- https://github.com/novnc/noVNC/archive/refs/tags/v1.3.0.tar.gz | tar xz --strip 1 -C $NO_VNC_HOME
-RUN wget -qO- https://github.com/novnc/websockify/archive/refs/tags/v0.10.0.tar.gz | tar xz --strip 1 -C $NO_VNC_HOME/utils/websockify
-RUN ln -s $NO_VNC_HOME/vnc_lite.html $NO_VNC_HOME/index.html
+RUN mkdir -p $NO_VNC_HOME/utils/websockify \ 
+  && wget -qO- https://github.com/novnc/noVNC/archive/refs/tags/v1.3.0.tar.gz | tar xz --strip 1 -C $NO_VNC_HOME \
+  && wget -qO- https://github.com/novnc/websockify/archive/refs/tags/v0.10.0.tar.gz | tar xz --strip 1 -C $NO_VNC_HOME/utils/websockify \
+  && ln -s $NO_VNC_HOME/vnc_lite.html $NO_VNC_HOME/index.html
 
 ############################################
 # Install Chrono dependencies
 ############################################
 RUN apt-get update \ 
-  && apt-get -y install cmake ninja-build build-essential libboost-dev swig libeigen3-dev \ 
+  && apt-get install -y --no-install-recommends cmake ninja-build build-essential libboost-dev swig libeigen3-dev \ 
   libglfw3-dev libglm-dev libglew-dev freeglut3-dev libirrlicht-dev \
   libxxf86vm-dev libopenmpi-dev python3 python3-dev libhdf5-dev libnvidia-gl-515 \
   && apt autoclean -y \
   && apt autoremove -y \
-  && rm -rf /var/lib/apt/lists/*
-RUN ldconfig
+  && rm -rf /var/lib/apt/lists/* \
+  && ldconfig
 
 RUN wget https://bitbucket.org/blaze-lib/blaze/downloads/blaze-3.8.tar.gz \
   && tar -xf blaze-3.8.tar.gz \
@@ -65,8 +64,8 @@ RUN wget https://bitbucket.org/blaze-lib/blaze/downloads/blaze-3.8.tar.gz \
 ############################################
 # Build Vanilla Chrono Release 8.0 without Tests
 ############################################
-RUN git clone --recursive https://github.com/projectchrono/chrono.git -b release/8.0
-RUN cd chrono \
+RUN git clone --recursive https://github.com/projectchrono/chrono.git -b release/8.0 \
+  && cd chrono \
   && mkdir -p build \
   && cd build \
   && cmake ../ -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF \
@@ -89,16 +88,17 @@ RUN cd chrono \
   && ninja install
 
 ############################################
-# Add necesary files
+# Add necessary scripts and files
 ############################################
-ADD ./src/ $HOME
-ADD ./scripts/ $STARTUPDIR
+ADD ./src/home $HOME
+ADD ./src/scripts $STARTUPDIR
 RUN chmod +x $STARTUPDIR/set_permissions.sh \
   && $STARTUPDIR/set_permissions.sh $STARTUPDIR $HOME
+
 ############################################
-# Start Container
+# Run startup script to start container
 ############################################
-ENTRYPOINT ["/sbel-start/startup.sh"]
+ENTRYPOINT ["/start/startup.sh"]
 
 ############################################
 # Instructions on running the container:
