@@ -91,7 +91,8 @@ RUN cd chrono \
 ############################################
 # Add necesary files
 ############################################
-ADD ./src/ $STARTUPDIR
+ADD ./src/ $HOME
+ADD ./scripts/ $STARTUPDIR
 RUN chmod +x $STARTUPDIR/set_permissions.sh \
   && $STARTUPDIR/set_permissions.sh $STARTUPDIR $HOME
 ############################################
@@ -101,5 +102,5 @@ ENTRYPOINT ["/sbel-start/startup.sh"]
 
 ############################################
 # Instructions on running the container:
-# docker run -it -p 6901:6901 <container tag name>
+# docker run -it -p 6901:6901 --gpus all <container tag name>
 ############################################
