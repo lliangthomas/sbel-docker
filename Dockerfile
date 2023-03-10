@@ -15,9 +15,7 @@ ENV HOME=/sbel \
     NO_VNC_HOME=/noVNC \
     DEBIAN_FRONTEND=noninteractive \
     VNC_COL_DEPTH=24 \
-    VNC_RESOLUTION=1280x1024 \
-    VNC_PW=vncpassword \
-    VNC_VIEW_ONLY=false
+    VNC_RESOLUTION=1280x1024
 WORKDIR $HOME
 
 ############################################
@@ -71,8 +69,8 @@ RUN git clone --recursive https://github.com/projectchrono/chrono.git
 RUN cd chrono \
   && mkdir -p build \
   && cd build \
-  && cmake ../ -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=TRUE \
-    -DBUILD_BENCHMARKING=TRUE -DENABLE_MODULE_POSTPROCESS=TRUE \ 
+  && cmake ../ -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF \
+    -DBUILD_BENCHMARKING=OFF -DENABLE_MODULE_POSTPROCESS=TRUE \ 
     -DENABLE_MODULE_PYTHON=TRUE -DENABLE_MODULE_COSIMULATION=FALSE \ 
     -DENABLE_MODULE_IRRLICHT=TRUE -DENABLE_MODULE_VEHICLE=TRUE \
     -DENABLE_MODULE_MULTICORE=TRUE -DENABLE_MODULE_OPENGL=TRUE \
@@ -86,8 +84,7 @@ RUN cd chrono \
     -DPYTHON_EXECUTABLE=/usr/bin/python3 \
     -DEIGEN3_INCLUDE_DIR=/usr/include/eigen3 \
     -DCMAKE_VERBOSE_MAKEFILE=TRUE \
-    -DENABLE_MODULE_SENSOR=OFF \
-    -DBUILD_TESTING_SENSOR=TRUE \
+    -DENABLE_MODULE_SENSOR=OFF \ 
   && ninja -j 8 \
   && ninja install
 
