@@ -92,7 +92,7 @@ RUN cd chrono \
 # Add necesary files
 ############################################
 ADD ./src/ $STARTUPDIR
-
+RUN $STARTUPDIR/set_permissions.sh $STARTUPDIR $HOME
 ############################################
 # Start Container
 ############################################
