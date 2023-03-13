@@ -11,7 +11,7 @@ EXPOSE $VNC_PORT $NO_VNC_PORT
 ENV HOME=/sbel \
     TERM=xterm \
     STARTUPDIR=/start \
-    NO_VNC_HOME=/noVNC \
+    NO_VNC_HOME=/sbel/noVNC \
     DEBIAN_FRONTEND=noninteractive \
     VNC_COL_DEPTH=24 \
     VNC_RESOLUTION=1280x1024
