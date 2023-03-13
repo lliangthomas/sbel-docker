@@ -27,14 +27,15 @@ RUN apt-get update \
   && rm -rf /var/lib/apt/lists/*
 
 ############################################
-# Install XFCE
+# Install XFCE and TigerVNC
 ############################################
 RUN apt-get update \ 
-  && apt-get install -y --no-install-recommends supervisor xfce4 xfce4-terminal xterm dbus-x11 libdbus-glib-1-2 \
+  && apt-get install -y --no-install-recommends supervisor tigervnc-standalone-server xfce4 xfce4-terminal xterm dbus-x11 libdbus-glib-1-2 \
   && apt-get purge -y pm-utils *screensaver* \
   && apt autoclean -y \
   && apt autoremove -y \
-  && rm -rf /var/lib/apt/lists/*
+  && rm -rf /var/lib/apt/lists/* \
+  && printf '\n# sbel-docker-novnc:\n$localhost = "no";\n1;\n' >>/etc/tigervnc/vncserver-config-defaults
 
 ############################################
 # Install noVNC
@@ -64,28 +65,28 @@ RUN wget https://bitbucket.org/blaze-lib/blaze/downloads/blaze-3.8.tar.gz \
 ############################################
 # Build Vanilla Chrono Release 8.0 without Tests
 ############################################
-RUN git clone --recursive https://github.com/projectchrono/chrono.git -b release/8.0 \
-  && cd chrono \
-  && mkdir -p build \
-  && cd build \
-  && cmake ../ -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF \
-    -DBUILD_BENCHMARKING=OFF -DENABLE_MODULE_POSTPROCESS=TRUE \ 
-    -DENABLE_MODULE_PYTHON=TRUE -DENABLE_MODULE_COSIMULATION=FALSE \ 
-    -DENABLE_MODULE_IRRLICHT=TRUE -DENABLE_MODULE_VEHICLE=TRUE \
-    -DENABLE_MODULE_MULTICORE=TRUE -DENABLE_MODULE_OPENGL=TRUE \
-    -DENABLE_MODULE_FSI=TRUE -DENABLE_MODULE_SYNCHRONO=TRUE \
-    -DENABLE_MODULE_CSHARP=TRUE -DENABLE_MODULE_GPU=TRUE \
-    -DENABLE_MODULE_DISTRIBUTED=TRUE \
-    -DENABLE_HDF5=TRUE \
-    -DCMAKE_C_COMPILER=/usr/bin/gcc \
-    -DCMAKE_CXX_COMPILER=/usr/bin/g++ \
-    -DCUDA_HOST_COMPILER=/usr/bin/gcc \
-    -DPYTHON_EXECUTABLE=/usr/bin/python3 \
-    -DEIGEN3_INCLUDE_DIR=/usr/include/eigen3 \
-    -DCMAKE_VERBOSE_MAKEFILE=TRUE \
-    -DENABLE_MODULE_SENSOR=OFF \ 
-  && ninja -j 8 \
-  && ninja install
+# RUN git clone --recursive https://github.com/projectchrono/chrono.git -b release/8.0 \
+#   && cd chrono \
+#   && mkdir -p build \
+#   && cd build \
+#   && cmake ../ -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF \
+#     -DBUILD_BENCHMARKING=OFF -DENABLE_MODULE_POSTPROCESS=TRUE \ 
+#     -DENABLE_MODULE_PYTHON=TRUE -DENABLE_MODULE_COSIMULATION=FALSE \ 
+#     -DENABLE_MODULE_IRRLICHT=TRUE -DENABLE_MODULE_VEHICLE=TRUE \
+#     -DENABLE_MODULE_MULTICORE=TRUE -DENABLE_MODULE_OPENGL=TRUE \
+#     -DENABLE_MODULE_FSI=TRUE -DENABLE_MODULE_SYNCHRONO=TRUE \
+#     -DENABLE_MODULE_CSHARP=TRUE -DENABLE_MODULE_GPU=TRUE \
+#     -DENABLE_MODULE_DISTRIBUTED=TRUE \
+#     -DENABLE_HDF5=TRUE \
+#     -DCMAKE_C_COMPILER=/usr/bin/gcc \
+#     -DCMAKE_CXX_COMPILER=/usr/bin/g++ \
+#     -DCUDA_HOST_COMPILER=/usr/bin/gcc \
+#     -DPYTHON_EXECUTABLE=/usr/bin/python3 \
+#     -DEIGEN3_INCLUDE_DIR=/usr/include/eigen3 \
+#     -DCMAKE_VERBOSE_MAKEFILE=TRUE \
+#     -DENABLE_MODULE_SENSOR=OFF \ 
+#   && ninja -j 8 \
+#   && ninja install
 
 ############################################
 # Add necessary scripts and files
