@@ -8,7 +8,7 @@ ENV DISPLAY=:1 \
     NO_VNC_PORT=6901
 EXPOSE $VNC_PORT $NO_VNC_PORT
 
-### Envrionment config
+### Environment Configuration
 ENV HOME=/headless \
     TERM=xterm \
     STARTUPDIR=/dockerstartup \
@@ -29,18 +29,15 @@ RUN apt-get update && apt-get install -y wget net-tools locales bzip2 procps pyt
     && apt-get clean -y && locale-gen en_US.UTF-8
 ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
 
-### Install xvnc-server & noVNC - HTML5 based VNC viewer
+### VNC and noVNC
 RUN $INST_SCRIPTS/tigervnc.sh
 RUN $INST_SCRIPTS/no_vnc.sh
-
-### Install Firefox
-RUN $INST_SCRIPTS/firefox.sh
 
 ### Install XFCE
 RUN $INST_SCRIPTS/xfce_ui.sh
 ADD ./src/common/xfce/ $HOME/
 
-### configure startup
+### Startup
 RUN $INST_SCRIPTS/libnss_wrapper.sh
 ADD ./src/common/scripts $STARTUPDIR
 RUN $INST_SCRIPTS/set_user_permission.sh $STARTUPDIR $HOME
