@@ -23,7 +23,6 @@ chmod 600 $PASSWD_PATH
 
 ## start vncserver and noVNC webclient
 echo -e "\n------------------ start noVNC  ----------------------------"
-if [[ $DEBUG == true ]]; then echo "$NO_VNC_HOME/utils/novnc_proxy --vnc localhost:$VNC_PORT --listen $NO_VNC_PORT"; fi
 $NO_VNC_HOME/utils/novnc_proxy --vnc localhost:$VNC_PORT --listen $NO_VNC_PORT > $STARTUPDIR/no_vnc_startup.log 2>&1 &
 PID_SUB=$!
 
@@ -36,11 +35,6 @@ vncserver -kill $DISPLAY &> $STARTUPDIR/vnc_startup.log \
 echo -e "start vncserver with param: VNC_COL_DEPTH=$VNC_COL_DEPTH, VNC_RESOLUTION=$VNC_RESOLUTION\n..."
 
 vnc_cmd="vncserver $DISPLAY -depth $VNC_COL_DEPTH -geometry $VNC_RESOLUTION PasswordFile=$HOME/.vnc/passwd"
-if [[ ${VNC_PASSWORDLESS:-} == "true" ]]; then
-  vnc_cmd="${vnc_cmd} -SecurityTypes None"
-fi
-
-if [[ $DEBUG == true ]]; then echo "$vnc_cmd"; fi
 $vnc_cmd > $STARTUPDIR/no_vnc_startup.log 2>&1
 
 echo -e "start window manager\n..."
