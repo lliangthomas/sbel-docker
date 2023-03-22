@@ -25,8 +25,8 @@ WORKDIR $HOME
 ADD ./src/common/install/ $INST_SCRIPTS/
 ADD ./src/debian/install/ $INST_SCRIPTS/
 
-### Install some common tools
-RUN $INST_SCRIPTS/tools.sh
+RUN apt-get update && apt-get install -y wget net-tools locales bzip2 procps python3-numpy \
+    && apt-get clean -y && locale-gen en_US.UTF-8
 ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
 
 ### Install custom fonts
