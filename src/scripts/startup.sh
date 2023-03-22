@@ -2,9 +2,6 @@
 ### every exit != 0 fails the script
 set -e
 
-# should also source $STARTUPDIR/generate_container_user
-source $HOME/.bashrc
-
 ## correct forwarding of shutdown signal
 cleanup () {
     kill -s SIGTERM $!
