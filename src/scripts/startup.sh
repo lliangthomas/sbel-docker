@@ -23,7 +23,7 @@ if [[ -f $PASSWD_PATH ]]; then
     rm -f $PASSWD_PATH
 fi
 
-echo "123" | vncpasswd -f >> $PASSWD_PATH
+echo "123" >> $PASSWD_PATH
 chmod 600 $PASSWD_PATH
 
 
