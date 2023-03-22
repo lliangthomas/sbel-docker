@@ -39,7 +39,10 @@ RUN mkdir -p $NO_VNC_HOME/utils/websockify \
     && ln -s $NO_VNC_HOME/vnc_lite.html $NO_VNC_HOME/index.html
 
 ### Install XFCE
-RUN $INST_SCRIPTS/xfce_ui.sh
+RUN apt-get update \
+    && apt-get install -y supervisor xfce4 xfce4-terminal xterm dbus-x11 libdbus-glib-1-2 \
+    && apt-get purge -y pm-utils *screensaver* \
+    && apt-get clean -y
 ADD ./src/common/xfce/ $HOME/
 
 ### Startup
