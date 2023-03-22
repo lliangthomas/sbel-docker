@@ -63,18 +63,6 @@ fi
 # should also source $STARTUPDIR/generate_container_user
 source $HOME/.bashrc
 
-# add `--skip` to startup args, to skip the VNC startup procedure
-if [[ $1 =~ -s|--skip ]]; then
-    echo -e "\n\n------------------ SKIP VNC STARTUP -----------------"
-    echo -e "\n\n------------------ EXECUTE COMMAND ------------------"
-    echo "Executing command: '${@:2}'"
-    exec "${@:2}"
-fi
-if [[ $1 =~ -d|--debug ]]; then
-    echo -e "\n\n------------------ DEBUG VNC STARTUP -----------------"
-    export DEBUG=true
-fi
-
 ## correct forwarding of shutdown signal
 cleanup () {
     kill -s SIGTERM $!
@@ -146,11 +134,4 @@ if [[ $DEBUG == true ]] || [[ $1 =~ -t|--tail-log ]]; then
     tail -f $STARTUPDIR/*.log $HOME/.vnc/*$DISPLAY.log
 fi
 
-if [ -z "$1" ] || [[ $1 =~ -w|--wait ]]; then
-    wait $PID_SUB
-else
-    # unknown option ==> call command
-    echo -e "\n\n------------------ EXECUTE COMMAND ------------------"
-    echo "Executing command: '$@'"
-    exec "$@"
-fi
+wait $PID_SUB

@@ -100,7 +100,6 @@ RUN chmod +x $STARTUPDIR/set_permissions.sh \
 # Run startup script to start container
 ############################################
 ENTRYPOINT ["/start/startup.sh"]
-CMD ["--wait"]
 
 ############################################
 # Instructions on running the container:
