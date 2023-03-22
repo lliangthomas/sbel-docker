@@ -30,8 +30,13 @@ RUN apt-get update && apt-get install -y wget net-tools locales bzip2 procps pyt
 ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
 
 ### VNC and noVNC
-RUN $INST_SCRIPTS/tigervnc.sh
-RUN $INST_SCRIPTS/no_vnc.sh
+RUN apt-get install -y tigervnc-standalone-server && apt-get clean -y \
+    && printf '\n# docker-headless-vnc-container:\n$localhost = "no";\n1;\n' >>/etc/tigervnc/vncserver-config-defaults
+
+RUN mkdir -p $NO_VNC_HOME/utils/websockify \
+    && wget -qO- https://github.com/novnc/noVNC/archive/refs/tags/v1.3.0.tar.gz | tar xz --strip 1 -C $NO_VNC_HOME \
+    && wget -qO- https://github.com/novnc/websockify/archive/refs/tags/v0.10.0.tar.gz | tar xz --strip 1 -C $NO_VNC_HOME/utils/websockify \ 
+    && ln -s $NO_VNC_HOME/vnc_lite.html $NO_VNC_HOME/index.html
 
 ### Install XFCE
 RUN $INST_SCRIPTS/xfce_ui.sh
