@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
-### every exit != 0 fails the script
 set -e
 
-### disable screensaver and power management
 xset -dpms &
 xset s noblank &
 xset s off &

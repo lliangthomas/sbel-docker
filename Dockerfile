@@ -1,8 +1,8 @@
 FROM nvidia/cuda:11.8.0-devel-ubuntu22.04
 
-############################################
+#####################################################
 # Pre-defined and environmental variables
-############################################
+#####################################################
 ENV DISPLAY=:1 \
     VNC_PORT=5901 \
     NO_VNC_PORT=6901 \
@@ -17,16 +17,16 @@ ENV DISPLAY=:1 \
 EXPOSE $VNC_PORT $NO_VNC_PORT
 WORKDIR $HOME
 
-############################################
+#####################################################
 # Install prerequisities
-############################################
+#####################################################
 RUN apt-get update && apt-get install -y wget net-tools locales bzip2 procps python3-numpy \
     && apt-get clean -y && locale-gen en_US.UTF-8
 ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
 
-############################################
+#####################################################
 # Install TigerVNC, noVNC, XFCE, Chrono Dependencies
-############################################
+#####################################################
     # TigerVNC
 RUN apt-get update && apt-get install -y tigervnc-standalone-server \
     && printf '\n# sbel-docker:\n$localhost = "no";\n1;\n' >>/etc/tigervnc/vncserver-config-defaults \
@@ -46,6 +46,7 @@ RUN apt-get update && apt-get install -y tigervnc-standalone-server \
     && apt autoremove -y \
     && rm -rf /var/lib/apt/lists/* \
     && ldconfig \
+    ## Blaze
     && wget https://bitbucket.org/blaze-lib/blaze/downloads/blaze-3.8.tar.gz \
     && tar -xf blaze-3.8.tar.gz \
     && cp -r blaze-3.8/blaze /usr/local/include \
@@ -53,9 +54,9 @@ RUN apt-get update && apt-get install -y tigervnc-standalone-server \
     # Ensure $STARTUPDIR exists
     && mkdir $STARTUPDIR
 
-############################################
+#####################################################
 # Build Vanilla Chrono Release 8.0 without Tests
-############################################
+#####################################################
 RUN git clone --recursive https://github.com/projectchrono/chrono.git -b release/8.0 \
     && cd chrono \
     && mkdir -p build \
@@ -80,11 +81,12 @@ RUN git clone --recursive https://github.com/projectchrono/chrono.git -b release
     && ninja -j 8 \
     && ninja install
 
-############################################
+#####################################################
 # Startup
-############################################
-ADD ./src/home/ $HOME/
-RUN $HOME/set_user_permission.sh $STARTUPDIR $HOME
+#####################################################
+ADD ./src/ $HOME/
+RUN chmod a+x $HOME/vnc_startup.sh $HOME/wm_startup.sh
+#RUN $HOME/set_user_permission.sh $STARTUPDIR $HOME
 
 ENTRYPOINT ["/sbel/vnc_startup.sh"]
 CMD ["--wait"]
