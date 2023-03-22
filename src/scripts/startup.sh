@@ -1,64 +1,6 @@
-# #!/usr/bin/env bash
-# source $HOME/.bashrc
-# cleanup () {
-#     kill -s SIGTERM $!
-#     exit 0
-# }
-# trap cleanup SIGINT SIGTERM
-# VNC_IP=$(hostname -i)
-
-# ############################################
-# # Start noVNC
-# ############################################
-# $NO_VNC_HOME/utils/novnc_proxy --vnc localhost:$VNC_PORT --listen $NO_VNC_PORT > $STARTUPDIR/no_vnc_startup.log 2>&1 &
-# PID_SUB=$!
-# vncserver -kill $DISPLAY &> $STARTUPDIR/vnc_startup.log \
-#     || rm -rfv /tmp/.X*-lock /tmp/.X11-unix &> $STARTUPDIR/vnc_startup.log \
-#     || echo "no locks present"
-
-# vnc_cmd="vncserver $DISPLAY -depth $VNC_COL_DEPTH -geometry $VNC_RESOLUTION -SecurityTypes None"
-# $vnc_cmd > $STARTUPDIR/no_vnc_startup.log 2>&1
-
-# ############################################
-# # Start XFCE
-# ############################################
-# $STARTUPDIR/wm_startup.sh &> $STARTUPDIR/wm_startup.log
-
-# echo -e "\n\n------------------ VNC environment started ------------------"
-# echo -e "\nVNCSERVER started on DISPLAY= $DISPLAY \n\t=> connect via VNC viewer with $VNC_IP:$VNC_PORT"
-# echo -e "\nnoVNC HTML client started:\n\t=> connect via http://$VNC_IP:$NO_VNC_PORT\n"
-
 #!/bin/bash
 ### every exit != 0 fails the script
 set -e
-
-## print out help
-help (){
-echo "
-USAGE:
-docker run -it -p 6901:6901 -p 5901:5901 consol/<image>:<tag> <option>
-IMAGES:
-consol/debian-xfce-vnc
-consol/rocky-xfce-vnc
-consol/debian-icewm-vnc
-consol/rocky-icewm-vnc
-TAGS:
-latest  stable version of branch 'master'
-dev     current development version of branch 'dev'
-OPTIONS:
--w, --wait      (default) keeps the UI and the vncserver up until SIGINT or SIGTERM will received
--s, --skip      skip the vnc startup and just execute the assigned command.
-                example: docker run consol/rocky-xfce-vnc --skip bash
--d, --debug     enables more detailed startup output
-                e.g. 'docker run consol/rocky-xfce-vnc --debug bash'
--h, --help      print out this help
-Fore more information see: https://github.com/ConSol/docker-headless-vnc-container
-"
-}
-if [[ $1 =~ -h|--help ]]; then
-    help
-    exit 0
-fi
 
 # should also source $STARTUPDIR/generate_container_user
 source $HOME/.bashrc
