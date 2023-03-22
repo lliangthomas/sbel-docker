@@ -23,11 +23,6 @@ if [[ -f $PASSWD_PATH ]]; then
     rm -f $PASSWD_PATH
 fi
 
-if [[ $VNC_VIEW_ONLY == "true" ]]; then
-    echo "start VNC server in VIEW ONLY mode!"
-    #create random pw to prevent access
-    echo $(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 20) | vncpasswd -f > $PASSWD_PATH
-fi
 echo "$VNC_PW" | vncpasswd -f >> $PASSWD_PATH
 chmod 600 $PASSWD_PATH
 

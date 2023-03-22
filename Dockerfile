@@ -30,7 +30,7 @@ RUN apt-get update \
 # Install XFCE and TigerVNC
 ############################################
 RUN apt-get update \ 
-  && apt-get install -y --no-install-recommends supervisor tigervnc-standalone-server xfce4 xfce4-terminal xterm dbus-x11 libdbus-glib-1-2 \
+  && apt-get install -y --no-install-recommends supervisor xfce4 xfce4-terminal tigervnc-standalone-server tigervnc-viewer xterm dbus-x11 libdbus-glib-1-2 \
   && apt-get purge -y pm-utils *screensaver* \
   && apt autoclean -y \
   && apt autoremove -y \
