@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
+### every exit != 0 fails the script
 set -e
 
-echo -e "\n------------------ Start XFCE4 ------------------"
+echo -e "\n------------------ startup of Xfce4 window manager ------------------"
 
 ### disable screensaver and power management
 xset -dpms &

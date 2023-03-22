@@ -1,107 +1,55 @@
 FROM nvidia/cuda:11.8.0-devel-ubuntu22.04
 
-############################################
-# Pre-defined and environmental variables
-############################################
+## Connection ports for controlling the UI:
+# VNC port:5901
+# noVNC webport, connect via http://IP:6901/?password=vncpassword
 ENV DISPLAY=:1 \
     VNC_PORT=5901 \
     NO_VNC_PORT=6901
 EXPOSE $VNC_PORT $NO_VNC_PORT
 
-ENV HOME=/sbel \
+### Envrionment config
+ENV HOME=/headless \
     TERM=xterm \
-    STARTUPDIR=/start \
-    NO_VNC_HOME=/sbel/noVNC \
+    STARTUPDIR=/dockerstartup \
+    INST_SCRIPTS=/headless/install \
+    NO_VNC_HOME=/headless/noVNC \
     DEBIAN_FRONTEND=noninteractive \
     VNC_COL_DEPTH=24 \
-    VNC_RESOLUTION=1280x1024
+    VNC_RESOLUTION=1280x1024 \
+    VNC_PW=vncpassword \
+    VNC_VIEW_ONLY=false
 WORKDIR $HOME
 
-############################################
-# Install pre-requisite packages
-############################################
-RUN apt-get update \ 
-  && apt-get install -y --no-install-recommends git wget net-tools bzip2 procps python3-numpy \
-  && apt autoclean -y \
-  && apt autoremove -y \
-  && rm -rf /var/lib/apt/lists/*
+### Add all install scripts for further steps
+ADD ./src/common/install/ $INST_SCRIPTS/
+ADD ./src/debian/install/ $INST_SCRIPTS/
 
-############################################
-# Install XFCE and TigerVNC
-############################################
-RUN apt-get update \ 
-  && apt-get install -y --no-install-recommends supervisor xfce4 xfce4-terminal tigervnc-standalone-server tigervnc-viewer xterm dbus-x11 libdbus-glib-1-2 \
-  && apt-get purge -y pm-utils *screensaver* \
-  && apt autoclean -y \
-  && apt autoremove -y \
-  && rm -rf /var/lib/apt/lists/* \
-  && printf '\n# sbel-docker-novnc:\n$localhost = "no";\n1;\n' >>/etc/tigervnc/vncserver-config-defaults
+### Install some common tools
+RUN $INST_SCRIPTS/tools.sh
+ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
 
-############################################
-# Install noVNC
-############################################
-RUN mkdir -p $NO_VNC_HOME/utils/websockify \ 
-  && wget -qO- https://github.com/novnc/noVNC/archive/refs/tags/v1.3.0.tar.gz | tar xz --strip 1 -C $NO_VNC_HOME \
-  && wget -qO- https://github.com/novnc/websockify/archive/refs/tags/v0.10.0.tar.gz | tar xz --strip 1 -C $NO_VNC_HOME/utils/websockify \
-  && ln -s $NO_VNC_HOME/vnc_lite.html $NO_VNC_HOME/index.html
+### Install custom fonts
+RUN $INST_SCRIPTS/install_custom_fonts.sh
 
-############################################
-# Install Chrono dependencies
-############################################
-RUN apt-get update \ 
-  && apt-get install -y --no-install-recommends cmake ninja-build build-essential libboost-dev swig libeigen3-dev \ 
-  libglfw3-dev libglm-dev libglew-dev freeglut3-dev libirrlicht-dev \
-  libxxf86vm-dev libopenmpi-dev python3 python3-dev libhdf5-dev libnvidia-gl-515 \
-  && apt autoclean -y \
-  && apt autoremove -y \
-  && rm -rf /var/lib/apt/lists/* \
-  && ldconfig
+### Install xvnc-server & noVNC - HTML5 based VNC viewer
+RUN $INST_SCRIPTS/tigervnc.sh
+RUN $INST_SCRIPTS/no_vnc.sh
 
-RUN wget https://bitbucket.org/blaze-lib/blaze/downloads/blaze-3.8.tar.gz \
-  && tar -xf blaze-3.8.tar.gz \
-  && cp -r blaze-3.8/blaze /usr/local/include \
-  && rm -rf blaze*
+### Install firefox and chrome browser
+RUN $INST_SCRIPTS/firefox.sh
+RUN $INST_SCRIPTS/chrome.sh
 
-############################################
-# Build Vanilla Chrono Release 8.0 without Tests
-############################################
-# RUN git clone --recursive https://github.com/projectchrono/chrono.git -b release/8.0 \
-#   && cd chrono \
-#   && mkdir -p build \
-#   && cd build \
-#   && cmake ../ -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF \
-#     -DBUILD_BENCHMARKING=OFF -DENABLE_MODULE_POSTPROCESS=TRUE \ 
-#     -DENABLE_MODULE_PYTHON=TRUE -DENABLE_MODULE_COSIMULATION=FALSE \ 
-#     -DENABLE_MODULE_IRRLICHT=TRUE -DENABLE_MODULE_VEHICLE=TRUE \
-#     -DENABLE_MODULE_MULTICORE=TRUE -DENABLE_MODULE_OPENGL=TRUE \
-#     -DENABLE_MODULE_FSI=TRUE -DENABLE_MODULE_SYNCHRONO=TRUE \
-#     -DENABLE_MODULE_CSHARP=TRUE -DENABLE_MODULE_GPU=TRUE \
-#     -DENABLE_MODULE_DISTRIBUTED=TRUE \
-#     -DENABLE_HDF5=TRUE \
-#     -DCMAKE_C_COMPILER=/usr/bin/gcc \
-#     -DCMAKE_CXX_COMPILER=/usr/bin/g++ \
-#     -DCUDA_HOST_COMPILER=/usr/bin/gcc \
-#     -DPYTHON_EXECUTABLE=/usr/bin/python3 \
-#     -DEIGEN3_INCLUDE_DIR=/usr/include/eigen3 \
-#     -DCMAKE_VERBOSE_MAKEFILE=TRUE \
-#     -DENABLE_MODULE_SENSOR=OFF \ 
-#   && ninja -j 8 \
-#   && ninja install
+### Install xfce UI
+RUN $INST_SCRIPTS/xfce_ui.sh
+ADD ./src/common/xfce/ $HOME/
 
-############################################
-# Add necessary scripts and files
-############################################
-ADD ./src/home $HOME
-ADD ./src/scripts $STARTUPDIR
-RUN chmod +x $STARTUPDIR/set_permissions.sh \
-  && $STARTUPDIR/set_permissions.sh $STARTUPDIR $HOME
+### configure startup
+RUN $INST_SCRIPTS/libnss_wrapper.sh
+ADD ./src/common/scripts $STARTUPDIR
+RUN $INST_SCRIPTS/set_user_permission.sh $STARTUPDIR $HOME
 
-############################################
-# Run startup script to start container
-############################################
-ENTRYPOINT ["/start/startup.sh"]
+USER 1000
 
-############################################
-# Instructions on running the container:
-# docker run -it -p 6901:6901 --gpus all <container tag name>
-############################################
+ENTRYPOINT ["/dockerstartup/vnc_startup.sh"]
+CMD ["--wait"]
