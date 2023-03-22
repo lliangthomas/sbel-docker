@@ -34,10 +34,6 @@ $vnc_cmd > $STARTUPDIR/no_vnc_startup.log 2>&1
 # XFCE
 $HOME/wm_startup.sh &> $STARTUPDIR/wm_startup.log
 
-## log connect options
-echo -e "\nVNCSERVER started on DISPLAY= $DISPLAY \n\t=> connect via VNC viewer with $VNC_IP:$VNC_PORT"
-echo -e "\nnoVNC HTML client started:\n\t=> connect via http://$VNC_IP:$NO_VNC_PORT/?password=...\n"
-
 if [ -z "$1" ] || [[ $1 =~ -w|--wait ]]; then
     wait $PID_SUB
 else
