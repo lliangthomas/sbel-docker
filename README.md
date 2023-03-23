@@ -18,5 +18,5 @@ Then, navigate to your modern browser and type ```localhost:6901```
 ```
 docker start <container-name>
 docker stop <container-name>
-docker remove <container-name>
+docker rm <container-name>
 ```
