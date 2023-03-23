@@ -33,12 +33,4 @@ $vnc_cmd > $STARTUPDIR/no_vnc_startup.log 2>&1
 
 # XFCE
 $HOME/wm_startup.sh &> $STARTUPDIR/wm_startup.log
-
-if [ -z "$1" ] || [[ $1 =~ -w|--wait ]]; then
-    wait $PID_SUB
-else
-    # unknown option ==> call command
-    echo -e "\n\n------------------ EXECUTE COMMAND ------------------"
-    echo "Executing command: '$@'"
-    exec "$@"
-fi
+wait $PID_SUB

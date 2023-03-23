@@ -86,7 +86,5 @@ RUN git clone --recursive https://github.com/projectchrono/chrono.git -b release
 #####################################################
 ADD ./src/ $HOME/
 RUN chmod a+x $HOME/vnc_startup.sh $HOME/wm_startup.sh
-#RUN $HOME/set_user_permission.sh $STARTUPDIR $HOME
 
 ENTRYPOINT ["/sbel/vnc_startup.sh"]
-CMD ["--wait"]
