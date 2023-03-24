@@ -7,8 +7,8 @@ NVIDIA GPU, Up-to-date NVIDIA drivers, 16GB+ RAM
 ## Instructions
 **Pull + Run**
 ```
-docker pull uwsbel/chrono-noVNC
-docker run -d -p 5901:5901 -p 6901:6901 --gpus all uwsbel/chrono-noVNC
+docker pull uwsbel/chrono-novnc
+docker run -d -p 5901:5901 -p 6901:6901 --gpus all uwsbel/chrono-novnc
 ```
 Then, navigate to your modern browser and type ```localhost:6901```
 
