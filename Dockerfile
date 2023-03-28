@@ -84,7 +84,7 @@ RUN git clone --recursive https://github.com/projectchrono/chrono.git -b release
 #####################################################
 # Startup
 #####################################################
-ADD ./src/ $HOME/
+#ADD ./src/ $HOME/
 ADD ./scripts/ $HOME/scripts/
 RUN chmod a+x $HOME/scripts/vnc_startup.sh $HOME/scripts/wm_startup.sh
 
