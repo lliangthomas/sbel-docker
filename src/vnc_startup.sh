@@ -8,7 +8,6 @@ cleanup () {
 }
 trap cleanup SIGINT SIGTERM
 
-## resolve_vnc_connection
 VNC_IP=$(hostname -i)
 
 ## VNC password
@@ -20,7 +19,7 @@ echo "$VNC_PW" | vncpasswd -f >> $PASSWD_PATH
 chmod 600 $PASSWD_PATH
 
 # noVNC
-$NO_VNC_HOME/utils/novnc_proxy --vnc localhost:$VNC_PORT --listen $NO_VNC_PORT > $STARTUPDIR/no_vnc_startup.log 2>&1 &
+$NO_VNC_HOME/utils/novnc_proxy --vnc localhost:$VNC_PORT --listen $NO_VNC_PORT &
 PID_SUB=$!
 
 # VNC
@@ -28,9 +27,8 @@ vncserver -kill $DISPLAY &> $STARTUPDIR/vnc_startup.log \
     || rm -rfv /tmp/.X*-lock /tmp/.X11-unix &> $STARTUPDIR/vnc_startup.log \
     || echo "no locks present"
 
-vnc_cmd="vncserver $DISPLAY -depth $VNC_COL_DEPTH -geometry $VNC_RESOLUTION PasswordFile=$HOME/.vnc/passwd"
-$vnc_cmd > $STARTUPDIR/no_vnc_startup.log 2>&1
+vncserver $DISPLAY -depth $VNC_COL_DEPTH -geometry $VNC_RESOLUTION PasswordFile=$HOME/.vnc/passwd &
 
 # XFCE
-$HOME/wm_startup.sh &> $STARTUPDIR/wm_startup.log
+$HOME/wm_startup.sh &
 wait $PID_SUB
