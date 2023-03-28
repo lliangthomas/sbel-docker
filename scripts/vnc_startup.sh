@@ -23,9 +23,8 @@ $NO_VNC_HOME/utils/novnc_proxy --vnc localhost:$VNC_PORT --listen $NO_VNC_PORT &
 PID_SUB=$!
 
 # VNC
-vncserver -kill $DISPLAY &> $STARTUPDIR/vnc_startup.log \
-    || rm -rfv /tmp/.X*-lock /tmp/.X11-unix &> $STARTUPDIR/vnc_startup.log \
-    || echo "no locks present"
+vncserver -kill $DISPLAY & \
+    || rm -rfv /tmp/.X*-lock /tmp/.X11-unix &
 
 vncserver $DISPLAY -depth $VNC_COL_DEPTH -geometry $VNC_RESOLUTION PasswordFile=$HOME/.vnc/passwd &
 
