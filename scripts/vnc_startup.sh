@@ -24,7 +24,7 @@ PID_SUB=$!
 
 # VNC
 vncserver -kill $DISPLAY & \
-    || rm -rfv /tmp/.X*-lock /tmp/.X11-unix &
+    || rm -rfv /tmp/.X*-lock /tmp/.X11-unix & \
 
 vncserver $DISPLAY -depth $VNC_COL_DEPTH -geometry $VNC_RESOLUTION PasswordFile=$HOME/.vnc/passwd &
 
