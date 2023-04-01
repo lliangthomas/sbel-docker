@@ -20,7 +20,7 @@ WORKDIR $HOME
 #####################################################
 # Install prerequisities
 #####################################################
-RUN apt-get update && apt-get install -y net-tools locales bzip2 procps python3-numpy \
+RUN apt-get update && apt-get install -y net-tools wget locales bzip2 procps python3-numpy \
     && apt-get clean -y && locale-gen en_US.UTF-8
 ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
 
@@ -45,7 +45,7 @@ RUN apt-get update && apt-get install -y tigervnc-standalone-server \
 # Install Chrono dependencies
 #####################################################
 RUN export LIB_DIR="lib" && export IOMP5_DIR="" \
-    && apt-get update && apt-get -y install unzip wget python3 python3-pip \
+    && apt-get update && apt-get -y install unzip python3 python3-pip \
       git cmake ninja-build doxygen libvulkan-dev pkg-config libirrlicht-dev \
       freeglut3-dev mpich libasio-dev libboost-dev libglfw3-dev libglm-dev \
       libglew-dev libtinyxml2-dev swig python3-dev libhdf5-dev libnvidia-gl-515 \
