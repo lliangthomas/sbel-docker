@@ -52,7 +52,7 @@ RUN export LIB_DIR="lib" && export IOMP5_DIR="" \
     && ldconfig
 
 ADD artifacts.zip $HOME/chrono/
-RUN unzip $HOME/chrono/artifacts.zip && cd $HOME/chrono/build/ && make install
+RUN cd $HOME/chrono && unzip artifacts.zip && cd build && make install
 ADD ./scripts/ $HOME/scripts/
 RUN chmod a+x $HOME/scripts/vnc_startup.sh $HOME/scripts/wm_startup.sh
 
