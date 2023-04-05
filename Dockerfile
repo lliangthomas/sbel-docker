@@ -1,4 +1,4 @@
-FROM uwsbel/ubuntu_packages_image:latest
+FROM nvidia/cuda:11.8.0-devel-ubuntu22.04
 
 #####################################################
 # Pre-defined and environmental variables
