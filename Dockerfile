@@ -50,6 +50,8 @@ RUN export LIB_DIR="lib" && export IOMP5_DIR="" \
       freeglut3-dev mpich libasio-dev libboost-dev libglfw3-dev libglm-dev \
       libglew-dev libtinyxml2-dev swig python3-dev libhdf5-dev libnvidia-gl-515 \
     && ldconfig
+RUN mkdir -p /builds/uwsbel && cd /builds/uwsbel \ 
+    && git clone https://github.com/projectchrono/chrono.git --recursive
 
 ADD artifacts.zip $HOME/chrono/
 RUN cd $HOME/chrono && unzip artifacts.zip && cd build && ninja install
