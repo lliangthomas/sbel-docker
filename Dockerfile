@@ -5,7 +5,7 @@ FROM uwsbel/ubuntu_packages_image AS builder
 RUN export LIB_DIR="lib" && export IOMP5_DIR="" \
     && apt-get update && apt-get -y install unzip python3 python3-pip \
       git cmake ninja-build doxygen libvulkan-dev pkg-config \
-      freeglut3-dev mpich libasio-dev libboost-dev \
+      freeglut3-dev mpich libasio-dev libboost-dev wget \
       libtinyxml2-dev swig python3-dev libhdf5-dev libnvidia-gl-515 \
     && ldconfig \
     && wget -O- https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB | \
