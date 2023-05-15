@@ -54,6 +54,7 @@ RUN mkdir -p /builds/uwsbel && cd /builds/uwsbel \
     && git clone https://github.com/projectchrono/chrono.git --recursive
 
 ADD artifacts.zip $HOME/chrono/
+RUN apt install libeigen3-dev
 RUN cd $HOME/chrono && unzip artifacts.zip && cd build && ninja install
 ADD ./scripts/ $HOME/scripts/
 RUN chmod a+x $HOME/scripts/vnc_startup.sh $HOME/scripts/wm_startup.sh
