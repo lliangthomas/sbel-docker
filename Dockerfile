@@ -13,7 +13,7 @@ RUN export LIB_DIR="lib" && export IOMP5_DIR="" \
     && echo "deb [signed-by=/usr/share/keyrings/oneapi-archive-keyring.gpg] \
       https://apt.repos.intel.com/oneapi all main" | tee /etc/apt/sources.list.d/oneAPI.list \ 
     && apt update \ 
-    && apt -y install intel-basekit libxcb-randr0-dev libxcb-xtest0-dev libxcb-xinerama0-dev
+    && apt -y install intel-basekit libxcb-randr0-dev libxcb-xtest0-dev libxcb-xinerama0-dev \
       libxcb-shape0-dev libxcb-xkb-dev xorg-dev \
     && cd ~/Packages/opencascade-7.4.0/build \ 
     && cmake -DBUILD_MODULE_Draw:BOOL=FALSE .. \
