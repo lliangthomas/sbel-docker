@@ -8,9 +8,9 @@ RUN export LIB_DIR="lib" && export IOMP5_DIR="" \
       freeglut3-dev mpich libasio-dev libboost-dev \
       libtinyxml2-dev swig python3-dev libhdf5-dev libnvidia-gl-515 \
     && ldconfig \
-    && wget -O- https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB | 
+    && wget -O- https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB | \
       gpg --dearmor | tee /usr/share/keyrings/oneapi-archive-keyring.gpg > /dev/null \
-    && echo "deb [signed-by=/usr/share/keyrings/oneapi-archive-keyring.gpg] 
+    && echo "deb [signed-by=/usr/share/keyrings/oneapi-archive-keyring.gpg] \
       https://apt.repos.intel.com/oneapi all main" | tee /etc/apt/sources.list.d/oneAPI.list \ 
     && apt update \ 
     && apt -y install intel-basekit libxcb-randr0-dev libxcb-xtest0-dev libxcb-xinerama0-dev
