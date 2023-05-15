@@ -13,7 +13,10 @@ ENV DISPLAY=:1 \
     DEBIAN_FRONTEND=noninteractive \
     VNC_COL_DEPTH=24 \
     VNC_RESOLUTION=1280x1024 \
-    VNC_PW=sbel
+    VNC_PW=sbel \
+    LANG='en_US.UTF-8' \
+    LANGUAGE='en_US:en' \
+    LC_ALL='en_US.UTF-8'
 EXPOSE $VNC_PORT $NO_VNC_PORT
 WORKDIR $HOME
 
@@ -22,7 +25,6 @@ WORKDIR $HOME
 #####################################################
 RUN apt-get update && apt-get install -y net-tools wget locales bzip2 procps python3-numpy \
     && apt-get clean -y && locale-gen en_US.UTF-8
-ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
 
 #####################################################
 # Install TigerVNC, noVNC, XFCE
