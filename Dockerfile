@@ -28,11 +28,19 @@ RUN export LIB_DIR="lib" && export IOMP5_DIR="" \
     && ninja -j 8
 
 #####################################################
-# Docker Image
+# Docker Image and Install builder Chrono
 #####################################################
 FROM uwsbel/ubuntu_packages_image
-RUN mkdir -p /builds/uwsbel && cd /builds/uwsbel
-COPY --from=builder 
+WORKDIR /
+RUN export LIB_DIR="lib" && export IOMP5_DIR="" \
+    && apt-get update && apt-get -y install unzip python3 python3-pip \
+      git cmake ninja-build doxygen libvulkan-dev pkg-config \
+      freeglut3-dev mpich libasio-dev libboost-dev \
+      libtinyxml2-dev swig python3-dev libhdf5-dev libnvidia-gl-515 \
+    && ldconfig 
+COPY --from=builder /builds .
+RUN cd /builds/uwsbel/chrono/build && make install 
+
 #####################################################
 # Pre-defined and environmental variables
 #####################################################
@@ -74,16 +82,6 @@ RUN apt-get update && apt-get install -y tigervnc-standalone-server \
     && apt-get purge -y pm-utils *screensaver* \
     # Ensure $STARTUPDIR exists
     && mkdir $STARTUPDIR
-
-#####################################################
-# Install Chrono dependencies
-#####################################################
-RUN export LIB_DIR="lib" && export IOMP5_DIR="" \
-    && apt-get update && apt-get -y install unzip python3 python3-pip \
-      git cmake ninja-build doxygen libvulkan-dev pkg-config \
-      freeglut3-dev mpich libasio-dev libboost-dev \
-      libtinyxml2-dev swig python3-dev libhdf5-dev libnvidia-gl-515 \
-    && ldconfig
 
 #ADD artifacts.zip $HOME/chrono/
 #RUN apt install libeigen3-dev
