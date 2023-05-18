@@ -1,17 +1,5 @@
 FROM nvidia/cuda:11.8.0-devel-ubuntu22.04
 #####################################################
-# Build and Install Chrono
-#####################################################
-RUN export LIB_DIR="lib" && export IOMP5_DIR="" \
-    && apt-get update && apt-get -y install unzip wget python3 python3-pip \
-    git cmake ninja-build doxygen libvulkan-dev pkg-config libirrlicht-dev \
-    freeglut3-dev mpich libasio-dev libboost-dev libglfw3-dev libglm-dev \
-    libglew-dev libtinyxml2-dev swig python3-dev libhdf5-dev libnvidia-gl-515 libxxf86vm-dev \
-    && ldconfig && apt-get clean -y
-ADD packages/ /Packages/
-RUN chmod +x /Packages/buildChrono.sh && bash /Packages/buildChrono.sh
-
-#####################################################
 # Evironmental variables
 #####################################################
 ENV DISPLAY=:1 \
@@ -23,15 +11,26 @@ ENV DISPLAY=:1 \
     NO_VNC_HOME=/sbel/noVNC \
     DEBIAN_FRONTEND=noninteractive \
     VNC_COL_DEPTH=24 \
-    VNC_RESOLUTION=1340x720 \
+    VNC_RESOLUTION=1600x900 \
     VNC_PW=sbel
 EXPOSE $VNC_PORT $NO_VNC_PORT
 
 #####################################################
+# Build and Install Chrono
+#####################################################
+RUN export LIB_DIR="lib" && export IOMP5_DIR="" \
+    && apt-get update && apt-get -y install unzip wget python3 python3-pip \
+    git cmake ninja-build doxygen libvulkan-dev pkg-config libirrlicht-dev \
+    freeglut3-dev mpich libasio-dev libboost-dev libglfw3-dev libglm-dev \
+    libglew-dev libtinyxml2-dev swig python3-dev libhdf5-dev libnvidia-gl-515 libxxf86vm-dev \
+    && ldconfig && apt-get autoclean -y && apt-get autoremove -y
+ADD packages/ /Packages/
+RUN chmod +x /Packages/buildChrono.sh && bash /Packages/buildChrono.sh
+
+#####################################################
 # Install TigerVNC, noVNC, XFCE
 #####################################################
-RUN apt-get update && apt-get install -y net-tools bzip2 procps python3-numpy \
-    && apt-get clean -y
+RUN apt-get update && apt-get install -y net-tools bzip2 procps python3-numpy
     # TigerVNC
 RUN apt-get update && apt-get install -y tigervnc-standalone-server \
     && printf '\n# sbel-docker:\n$localhost = "no";\n1;\n' >>/etc/tigervnc/vncserver-config-defaults \
@@ -42,6 +41,7 @@ RUN apt-get update && apt-get install -y tigervnc-standalone-server \
     && ln -s $NO_VNC_HOME/vnc_lite.html $NO_VNC_HOME/index.html \
     # XFCE
     && apt-get install -y supervisor xfce4 xfce4-terminal xterm dbus-x11 libdbus-glib-1-2 \
+    && apt-get autoclean -y && apt-get autoremove -y \
     # Ensure $STARTUPDIR exists
     && mkdir $STARTUPDIR
 
