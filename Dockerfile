@@ -1,4 +1,18 @@
-FROM nvidia/cuda:11.8.0-devel-ubuntu22.04
+## =============================================================================
+## PROJECT CHRONO - http://projectchrono.org
+##
+## Copyright (c) 2023 projectchrono.org
+## All rights reserved.
+##
+## Use of this source code is governed by a BSD-style license that can be found
+## in the LICENSE file at the top level of the distribution and at
+## http://projectchrono.org/license-chrono.txt.
+##
+## =============================================================================
+## Authors: Thomas Liang
+## =============================================================================
+FROM uwsbel/projectchrono_novnc:packages
+
 #####################################################
 # Evironmental variables
 #####################################################
@@ -24,7 +38,6 @@ RUN export LIB_DIR="lib" && export IOMP5_DIR="" \
     freeglut3-dev mpich libasio-dev libboost-dev libglfw3-dev libglm-dev \
     libglew-dev libtinyxml2-dev swig python3-dev libhdf5-dev libnvidia-gl-515 libxxf86vm-dev \
     && ldconfig && apt-get autoclean -y && apt-get autoremove -y
-ADD packages/ /Packages/
 RUN chmod +x /Packages/buildChrono.sh && bash /Packages/buildChrono.sh
 
 #####################################################
@@ -45,6 +58,9 @@ RUN apt-get update && apt-get install -y tigervnc-standalone-server \
     # Ensure $STARTUPDIR exists
     && mkdir $STARTUPDIR
 
+#####################################################
+# Startup
+#####################################################
 ADD ./src/ $HOME/src/
 ADD ./desktop/ $HOME/Desktop/
 RUN chmod a+x $HOME/src/vnc_startup.sh $HOME/src/wm_startup.sh && rm -rf /Packages/optix-7.5.0
