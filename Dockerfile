@@ -1,4 +1,4 @@
-## =============================================================================
+# =============================================================================
 ## PROJECT CHRONO - http://projectchrono.org
 ##
 ## Copyright (c) 2023 projectchrono.org
@@ -38,7 +38,8 @@ RUN export LIB_DIR="lib" && export IOMP5_DIR="" \
     freeglut3-dev mpich libasio-dev libboost-dev libglfw3-dev libglm-dev \
     libglew-dev libtinyxml2-dev swig python3-dev libhdf5-dev libnvidia-gl-515 libxxf86vm-dev \
     && ldconfig && apt-get autoclean -y && apt-get autoremove -y
-RUN chmod +x /Packages/buildChrono.sh && bash /Packages/buildChrono.sh
+ADD buildChrono.sh /
+RUN chmod +x /buildChrono.sh && bash /buildChrono.sh
 
 #####################################################
 # Install TigerVNC, noVNC, XFCE
