@@ -1,6 +1,8 @@
-FROM nvidia/cuda:11.8.0-devel-ubuntu22.04
+# Includes NVIDIA 11.8.0-devel-ubuntu22.04 and all Chrono dependencies
+FROM uwsbel/ubuntu_packages_image:latest
+
 #####################################################
-# Evironmental variables
+# Pre-defined and environmental variables
 #####################################################
 ENV DISPLAY=:1 \
     VNC_PORT=5901 \
@@ -11,26 +13,21 @@ ENV DISPLAY=:1 \
     NO_VNC_HOME=/sbel/noVNC \
     DEBIAN_FRONTEND=noninteractive \
     VNC_COL_DEPTH=24 \
-    VNC_RESOLUTION=1600x900 \
+    VNC_RESOLUTION=1280x1024 \
     VNC_PW=sbel
 EXPOSE $VNC_PORT $NO_VNC_PORT
+WORKDIR $HOME
 
 #####################################################
-# Build and Install Chrono
+# Install prerequisities
 #####################################################
-RUN export LIB_DIR="lib" && export IOMP5_DIR="" \
-    && apt-get update && apt-get -y install unzip wget python3 python3-pip \
-    git cmake ninja-build doxygen libvulkan-dev pkg-config libirrlicht-dev \
-    freeglut3-dev mpich libasio-dev libboost-dev libglfw3-dev libglm-dev \
-    libglew-dev libtinyxml2-dev swig python3-dev libhdf5-dev libnvidia-gl-515 libxxf86vm-dev \
-    && ldconfig && apt-get autoclean -y && apt-get autoremove -y
-ADD packages/ /Packages/
-RUN chmod +x /Packages/buildChrono.sh && bash /Packages/buildChrono.sh
+RUN apt-get update && apt-get install -y net-tools locales bzip2 procps python3-numpy \
+    && apt-get clean -y && locale-gen en_US.UTF-8
+ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
 
 #####################################################
 # Install TigerVNC, noVNC, XFCE
 #####################################################
-RUN apt-get update && apt-get install -y net-tools bzip2 procps python3-numpy
     # TigerVNC
 RUN apt-get update && apt-get install -y tigervnc-standalone-server \
     && printf '\n# sbel-docker:\n$localhost = "no";\n1;\n' >>/etc/tigervnc/vncserver-config-defaults \
@@ -41,12 +38,27 @@ RUN apt-get update && apt-get install -y tigervnc-standalone-server \
     && ln -s $NO_VNC_HOME/vnc_lite.html $NO_VNC_HOME/index.html \
     # XFCE
     && apt-get install -y supervisor xfce4 xfce4-terminal xterm dbus-x11 libdbus-glib-1-2 \
-    && apt-get autoclean -y && apt-get autoremove -y \
+    && apt-get purge -y pm-utils *screensaver* \
     # Ensure $STARTUPDIR exists
     && mkdir $STARTUPDIR
 
-ADD ./src/ $HOME/src/
-ADD ./desktop/ $HOME/Desktop/
-RUN chmod a+x $HOME/src/vnc_startup.sh $HOME/src/wm_startup.sh && rm -rf /Packages/optix-7.5.0
-WORKDIR /sbel
-ENTRYPOINT ["/sbel/src/vnc_startup.sh"]
+#####################################################
+# Build Vanilla Chrono
+#####################################################
+RUN git clone --recursive https://github.com/projectchrono/chrono.git \
+    && export C_COMPILER="/usr/bin/gcc" \
+    && export CXX_COMPILER="/usr/bin/g++" \
+    && cd chrono \
+    && cmake -G "Ninja" -B ./build/ -S . --preset=linuxci \
+    && cd build \
+    && ninja -j 8 \
+    && ninja install
+
+#####################################################
+# Startup
+#####################################################
+#ADD ./src/ $HOME/
+ADD ./scripts/ $HOME/scripts/
+RUN chmod a+x $HOME/scripts/vnc_startup.sh $HOME/scripts/wm_startup.sh
+
+ENTRYPOINT ["/sbel/scripts/vnc_startup.sh"]
