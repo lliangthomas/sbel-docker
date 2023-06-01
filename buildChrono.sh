@@ -12,19 +12,19 @@ SOURCE_DIR="$HOME/Desktop/chrono"
 BUILD_DIR="$HOME/Desktop/chrono/build"
 INSTALL_DIR="$HOME/Desktop/chrono/install"
 
-EIGEN3_INSTALL_DIR="/Packages/eigen-3.4.0"
-BLAZE_INSTALL_DIR="/Packages/blaze-3.8"
-SPECTRA_INSTALL_DIR="/Packages/spectra"
+EIGEN3_INSTALL_DIR="/root/Packages/eigen-3.4.0"
+BLAZE_INSTALL_DIR="/root/Packages/blaze-3.8"
+SPECTRA_INSTALL_DIR="/root/Packages/spectra"
 
-CRG_INCLUDE_DIR="/Packages/OpenCRG/include"
-CRG_LIBRARY="/Packages/OpenCRG/lib/libOpenCRG.1.1.2.a"
+CRG_INCLUDE_DIR="/root/Packages/OpenCRG/include"
+CRG_LIBRARY="/root/Packages/OpenCRG/lib/libOpenCRG.1.1.2.a"
 
-IRRLICHT_INSTALL_DIR="/Packages/irrlicht-1.8.5"
-VSG_INSTALL_DIR="/Packages/vsg"
-GL_INSTALL_DIR="/Packages/gl"
+IRRLICHT_INSTALL_DIR="/root/Packages/irrlicht-1.8.5"
+VSG_INSTALL_DIR="/root/Packages/vsg"
+GL_INSTALL_DIR="/root/Packages/gl"
 
-OPTIX_INSTALL_DIR="/Packages/optix-7.5.0"
-FASTRTPS_INSTALL_DIR="/Packages/fastrtps-2.4.0"
+OPTIX_INSTALL_DIR="/root/Packages/optix-7.5.0"
+FASTRTPS_INSTALL_DIR="/root/Packages/fastrtps-2.4.0"
 
 SWIG_EXE="swig"
 

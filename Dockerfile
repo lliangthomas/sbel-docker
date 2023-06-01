@@ -11,7 +11,7 @@
 ## =============================================================================
 ## Authors: Thomas Liang
 ## =============================================================================
-FROM uwsbel/projectchrono_novnc:packages
+FROM uwsbel/packages:ubuntu
 
 #####################################################
 # Evironmental variables
@@ -30,19 +30,23 @@ ENV DISPLAY=:1 \
 EXPOSE $VNC_PORT $NO_VNC_PORT
 
 #####################################################
-# Build and Install Chrono
+# Chrono Dependencies
 #####################################################
 RUN export LIB_DIR="lib" && export IOMP5_DIR="" \
     && apt-get update && apt-get -y install unzip wget python3 python3-pip \
     git cmake ninja-build doxygen libvulkan-dev pkg-config libirrlicht-dev \
     freeglut3-dev mpich libasio-dev libboost-dev libglfw3-dev libglm-dev \
-    libglew-dev libtinyxml2-dev swig python3-dev libhdf5-dev libnvidia-gl-515 libxxf86vm-dev \
+    libglew-dev libtinyxml2-dev swig python3-dev libhdf5-dev libnvidia-gl-530 libxxf86vm-dev \
     && ldconfig && apt-get autoclean -y && apt-get autoremove -y
+
+#####################################################
+# Build Chrono and Install
+#####################################################
 ADD buildChrono.sh /
 RUN chmod +x /buildChrono.sh && bash /buildChrono.sh
 
 #####################################################
-# Install TigerVNC, noVNC, XFCE
+# Visualization and GUI
 #####################################################
 RUN apt-get update && apt-get install -y net-tools bzip2 procps python3-numpy
     # TigerVNC
