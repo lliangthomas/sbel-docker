@@ -47,7 +47,7 @@ cmake -G ${BUILDSYSTEM} -B ${BUILD_DIR} -S ${SOURCE_DIR} \
       -DENABLE_MODULE_GPU:BOOL=ON \
       -DENABLE_MODULE_DISTRIBUTED:BOOL=ON \
       -DENABLE_MODULE_PARDISO_MKL:BOOL=OFF \
-      -DENABLE_MODULE_CASCADE:BOOL=OFF \
+      -DENABLE_MODULE_CASCADE:BOOL=ON \
       -DENABLE_MODULE_COSIMULATION:BOOL=ON \
       -DENABLE_MODULE_SENSOR:BOOL=ON \
       -DENABLE_MODULE_MODAL:BOOL=ON \
@@ -79,6 +79,6 @@ cmake -G ${BUILDSYSTEM} -B ${BUILD_DIR} -S ${SOURCE_DIR} \
       -DCMAKE_BUILD_TYPE="Release" \
       -DCUDA_ARCH_NAME=All
 
-cmake --build ${BUILD_DIR} --config Release
+cmake --build ${BUILD_DIR} --config Release -j 8
 cd build
 ninja install
