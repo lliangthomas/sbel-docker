@@ -1,7 +1,7 @@
 #!/bin/bash
 mkdir -p $HOME/Desktop
 cd $HOME/Desktop
-git clone https://github.com/projectchrono/chrono.git
+git clone -b release/8.0 https://github.com/projectchrono/chrono.git
 cd chrono
 git submodule init
 git submodule update
@@ -61,7 +61,7 @@ cmake -G ${BUILDSYSTEM} -B ${BUILD_DIR} -S ${SOURCE_DIR} \
       -DUSE_CUDA_NVRTC:BOOL=ON \
       -DUSE_FAST_DDS:BOOL=ON \
       -DEIGEN3_INCLUDE_DIR:PATH=${EIGEN3_INSTALL_DIR} \
-      -DBLAZE_INSTALL_DIR:PATH=${BLAZE_INSTALL_DIR} \
+      -DBLAZE_DIR:PATH=${BLAZE_INSTALL_DIR} \
       -DOptiX_INSTALL_DIR:PATH=${OPTIX_INSTALL_DIR} \
       -Dfastrtps_INSTALL_DIR:PATH=${FASTRTPS_INSTALL_DIR} \
       -DGLEW_DIR=${GL_INSTALL_DIR}/${LIB_DIR}/cmake/glew \
