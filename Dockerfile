@@ -68,6 +68,7 @@ RUN apt-get update && apt-get install -y tigervnc-standalone-server \
 #####################################################
 ADD ./src/ $HOME/src/
 ADD ./desktop/ $HOME/Desktop/
-RUN chmod a+x $HOME/src/vnc_startup.sh $HOME/src/wm_startup.sh && rm -rf /root/Packages/optix-7.5.0
+RUN chmod a+x $HOME/src/vnc_startup.sh $HOME/src/wm_startup.sh && rm -rf /Packages/optix-7.5.0 \
+    && rm -rf /usr/lib/x86_64-linux-gnu/libnvidia-ml.so.1 /usr/lib/x86_64-linux-gnu/libcuda.so.1 /usr/lib/x86_64-linux-gnu/libcudadebugger.so.1
 WORKDIR /sbel
 ENTRYPOINT ["/sbel/src/vnc_startup.sh"]
