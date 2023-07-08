@@ -1,8 +1,5 @@
 #!/bin/bash
-mkdir -p $HOME/Desktop
-cd $HOME/Desktop
-git clone https://github.com/projectchrono/chrono.git
-cd chrono
+cd $HOME/Desktop/chrono
 git submodule init
 git submodule update
 
@@ -30,7 +27,7 @@ SWIG_EXE="swig"
 
 # ------------------------------------------------------------------------
 
-BUILDSYSTEM="Ninja Multi-Config"
+BUILDSYSTEM="Ninja"
 
 # ------------------------------------------------------------------------
 
@@ -42,24 +39,26 @@ cmake -G ${BUILDSYSTEM} -B ${BUILD_DIR} -S ${SOURCE_DIR} \
       -DENABLE_MODULE_VEHICLE:BOOL=ON \
       -DIOMP5_LIBRARY=${IOMP5_DIR} \
       -DENABLE_MODULE_POSTPROCESS:BOOL=ON \
-      -DENABLE_MODULE_MULTICORE:BOOL=ON \
+      -DENABLE_MODULE_MULTICORE:BOOL=OFF \
       -DENABLE_MODULE_FSI:BOOL=ON \
-      -DENABLE_MODULE_GPU:BOOL=ON \
-      -DENABLE_MODULE_DISTRIBUTED:BOOL=ON \
+      -DENABLE_MODULE_GPU:BOOL=OFF \
+      -DENABLE_MODULE_DISTRIBUTED:BOOL=OFF \
       -DENABLE_MODULE_PARDISO_MKL:BOOL=OFF \
-      -DENABLE_MODULE_CASCADE:BOOL=ON \
-      -DENABLE_MODULE_COSIMULATION:BOOL=ON \
+      -DENABLE_MODULE_CASCADE:BOOL=OFF \
+      -DENABLE_MODULE_COSIMULATION:BOOL=OFF \
       -DENABLE_MODULE_SENSOR:BOOL=ON \
-      -DENABLE_MODULE_MODAL:BOOL=ON \
+      -DENABLE_OPENMP=ON \
+      -DENABLE_MODULE_MODAL:BOOL=OFF \
       -DENABLE_MODULE_MATLAB:BOOL=OFF \
-      -DENABLE_MODULE_CSHARP:BOOL=ON \
-      -DENABLE_MODULE_PYTHON:BOOL=ON \
-      -DENABLE_MODULE_SYNCHRONO:BOOL=ON \
+      -DENABLE_MODULE_CSHARP:BOOL=OFF \
+      -DENABLE_MODULE_PYTHON:BOOL=OFF \
+      -DENABLE_MODULE_SYNCHRONO:BOOL=OFF \
       -DBUILD_BENCHMARKING:BOOL=OFF \
       -DBUILD_TESTING:BOOL=OFF \
-      -DENABLE_OPENCRG:BOOL=ON \
-      -DUSE_CUDA_NVRTC:BOOL=ON \
-      -DUSE_FAST_DDS:BOOL=ON \
+      -DBUILD_DEMOS=OFF \
+      -DENABLE_OPENCRG:BOOL=OFF \
+      -DUSE_CUDA_NVRTC:BOOL=OFF \
+      -DUSE_FAST_DDS:BOOL=OFF \
       -DEIGEN3_INCLUDE_DIR:PATH=${EIGEN3_INSTALL_DIR} \
       -DBLAZE_INSTALL_DIR:PATH=${BLAZE_INSTALL_DIR} \
       -DOptiX_INSTALL_DIR:PATH=${OPTIX_INSTALL_DIR} \
@@ -69,7 +68,6 @@ cmake -G ${BUILDSYSTEM} -B ${BUILD_DIR} -S ${SOURCE_DIR} \
       -DGLM_INCLUDE_DIR:PATH=${GL_INSTALL_DIR}/include \
       -DOpenCRG_INCLUDE_DIR:PATH=${CRG_INCLUDE_DIR} \
       -DOpenCRG_LIBRARY:FILEPATH=${CRG_LIBRARY} \
-      -DOpenCASCADE_DIR:PATH=${CASCADE_INSTALL_DIR}/adm \
       -DSPECTRA_INCLUDE_DIR:PATH=${SPECTRA_INSTALL_DIR}/include \
       -DMATLAB_SDK_ROOT:PATH=${MATLAB_INSTALL_DIR}/extern \
       -Dvsg_DIR:PATH=${VSG_INSTALL_DIR}/${LIB_DIR}/cmake/vsg \
@@ -77,8 +75,8 @@ cmake -G ${BUILDSYSTEM} -B ${BUILD_DIR} -S ${SOURCE_DIR} \
       -DvsgXchange_DIR:PATH=${VSG_INSTALL_DIR}/${LIB_DIR}/cmake/vsgXchange \
       -DSWIG_EXECUTABLE:FILEPATH=${SWIG_EXE} \
       -DCMAKE_BUILD_TYPE="Release" \
-      -DCUDA_ARCH_NAME=All
+      -DCUDA_ARCH_NAME="Turing"
 
-cmake --build ${BUILD_DIR} --config Release -j 8
+ninja
 cd build
 ninja install

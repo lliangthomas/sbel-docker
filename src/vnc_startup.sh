@@ -8,6 +8,9 @@ cleanup () {
 }
 trap cleanup SIGINT SIGTERM
 
+# ROS
+source $HOME/install/setup.bash
+
 ## VNC password
 mkdir -p "$HOME/.vnc"
 echo "$VNC_PW" | vncpasswd -f >> $HOME/.vnc/passwd
