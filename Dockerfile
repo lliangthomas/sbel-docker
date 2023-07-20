@@ -44,7 +44,7 @@ RUN apt update && apt install -y software-properties-common && add-apt-repositor
 #####################################################
 RUN mkdir -p $HOME/ros-src && cd $HOME/ros-src && git clone https://github.com/ros/ros_tutorials.git -b humble-devel \
     && cd $HOME && rosdep init && rosdep update && rosdep install -i --from-path $HOME/ros-src --rosdistro humble -y \
-    && cd $HOME && . /opt/ros/humble/setup.sh && colcon build
+    && cd $HOME && ./opt/ros/humble/setup.sh && colcon build
     
 #####################################################
 # Chrono Dependencies
