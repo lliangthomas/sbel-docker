@@ -23,6 +23,9 @@ GL_INSTALL_DIR="/root/Packages/gl"
 OPTIX_INSTALL_DIR="/root/Packages/optix-7.5.0"
 FASTRTPS_INSTALL_DIR="/root/Packages/fastrtps-2.4.0"
 
+GVDB_INCLUDE="$HOME/Desktop/chrono/src/chrono_thirdparty/gvdb-voxels/_output/include"
+GVDB_LIBRARY="$HOME/Desktop/chrono/src/chrono_thirdparty/gvdb-voxels/_output/bin/libgvdb.so"
+
 SWIG_EXE="swig"
 
 # ------------------------------------------------------------------------
@@ -75,8 +78,11 @@ cmake -G ${BUILDSYSTEM} -B ${BUILD_DIR} -S ${SOURCE_DIR} \
       -DvsgXchange_DIR:PATH=${VSG_INSTALL_DIR}/${LIB_DIR}/cmake/vsgXchange \
       -DSWIG_EXECUTABLE:FILEPATH=${SWIG_EXE} \
       -DCMAKE_BUILD_TYPE="Release" \
+      -DUSE_GVDB:BOOL=ON \
+      -DGVDB_INCLUDE:PATH=${GVDB_INCLUDE} \
+      -DGVDB_LIBRARY:PATH=${GVDB_LIBRARY} \
       -DCUDA_ARCH_NAME="Turing"
 
-ninja
 cd build
+ninja
 ninja install

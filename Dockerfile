@@ -52,7 +52,7 @@ RUN mkdir -p $HOME/ros-src && cd $HOME/ros-src && git clone https://github.com/r
 RUN export LIB_DIR="lib" && export IOMP5_DIR="" \
     && apt-get update && apt-get -y install unzip wget python3 python3-pip \
     git cmake ninja-build doxygen libvulkan-dev pkg-config libirrlicht-dev \
-    freeglut3-dev mpich libasio-dev libboost-dev libglfw3-dev libglm-dev \
+    freeglut3-dev mpich libasio-dev libboost-dev libglfw3-dev libglm-dev openmpi-common libopenmpi-dev \
     libglew-dev libtinyxml2-dev swig python3-dev libhdf5-dev libnvidia-gl-530 libxxf86vm-dev \
     && ldconfig && apt-get autoclean -y && apt-get autoremove -y
 
