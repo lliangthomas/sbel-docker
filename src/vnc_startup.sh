@@ -9,7 +9,7 @@ cleanup () {
 trap cleanup SIGINT SIGTERM
 
 # ROS
-source $HOME/install/setup.bash
+source /opt/ros/humble/setup.sh
 
 ## VNC password
 mkdir -p "$HOME/.vnc"
@@ -26,5 +26,5 @@ vncserver -kill $DISPLAY &> $STARTUPDIR/vnc_startup.log \
 vncserver $DISPLAY -depth $VNC_COL_DEPTH -geometry $VNC_RESOLUTION PasswordFile=$HOME/.vnc/passwd &
 
 # XFCE
-$HOME/wm_startup.sh &
+$HOME/src/wm_startup.sh &
 wait $PID_SUB
