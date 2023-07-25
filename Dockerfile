@@ -62,25 +62,7 @@ RUN export LIB_DIR="lib" && export IOMP5_DIR="" \
 #####################################################
 ADD buildChrono.sh /
 ADD chrono-internal $HOME/Desktop/chrono
-RUN chmod +x /buildChrono.sh && bash /buildChrono.sh
-
-#####################################################
-# Visualization and GUI
-#####################################################
-RUN apt-get update && apt-get install -y net-tools bzip2 procps python3-numpy
-    # TigerVNC
-RUN apt-get update && apt-get install -y tigervnc-standalone-server \
-    && printf '\n# sbel-docker:\n$localhost = "no";\n1;\n' >>/etc/tigervnc/vncserver-config-defaults \
-    # noVNC
-    && mkdir -p $NO_VNC_HOME/utils/websockify \
-    && wget -qO- https://github.com/novnc/noVNC/archive/refs/tags/v1.3.0.tar.gz | tar xz --strip 1 -C $NO_VNC_HOME \
-    && wget -qO- https://github.com/novnc/websockify/archive/refs/tags/v0.10.0.tar.gz | tar xz --strip 1 -C $NO_VNC_HOME/utils/websockify \ 
-    && ln -s $NO_VNC_HOME/vnc_lite.html $NO_VNC_HOME/index.html \
-    # XFCE
-    && apt-get install -y supervisor xfce4 xfce4-terminal xterm dbus-x11 libdbus-glib-1-2 \
-    && apt-get autoclean -y && apt-get autoremove -y \
-    # Ensure $STARTUPDIR exists
-    && mkdir $STARTUPDIR
+#RUN chmod +x /buildChrono.sh && bash /buildChrono.sh
 
 #####################################################
 # Startup and Cleanup
@@ -90,9 +72,9 @@ ADD ./desktop/ $HOME/Desktop/
 ADD bashrc $HOME/.bashrc
 RUN mkdir $HOME/Desktop/chrono/chrono_sensor_ros_node
 ADD ./chrono_sensor_ros_node/ $HOME/Desktop/chrono/chrono_sensor_ros_node
-RUN chmod a+x $HOME/src/vnc_startup.sh $HOME/src/wm_startup.sh && rm -rf /root/Packages/optix-7.5.0 \
+RUN chmod a+x $HOME/src/vnc_startup.sh $HOME/src/wm_startup.sh \
     && rm -rf /usr/lib/x86_64-linux-gnu/libnvidia-ml.so.1 /usr/lib/x86_64-linux-gnu/libcuda.so.1 /usr/lib/x86_64-linux-gnu/libcudadebugger.so.1 \
     && mkdir $HOME/ros-src/image_subscriber/
 ADD streamer.py $HOME/ros-src/image_subscriber/
 WORKDIR /sbel
-ENTRYPOINT ["/sbel/src/vnc_startup.sh"]
+ENTRYPOINT ["/bin/bash"]
