@@ -1,5 +1,7 @@
 #!/bin/bash
-git clone -b feature/ros https://github.com/projectchrono/chrono/tree/feature/ros $HOME/Desktop/chrono
+source /opt/ros/humble/setup.sh
+source /chrono_ros_interfaces/install/setup.bash
+git clone -b feature/ros https://github.com/projectchrono/chrono.git $HOME/Desktop/chrono
 cd $HOME/Desktop/chrono
 git submodule init
 git submodule update
@@ -21,7 +23,7 @@ IRRLICHT_INSTALL_DIR="/root/Packages/irrlicht-1.8.5"
 VSG_INSTALL_DIR="/root/Packages/vsg"
 GL_INSTALL_DIR="/root/Packages/gl"
 
-OPTIX_INSTALL_DIR="/root/Packages/optix-7.5.0"
+OPTIX_INSTALL_DIR="/root/Packages/optix-7.7.0"
 FASTRTPS_INSTALL_DIR="/root/Packages/fastrtps-2.4.0"
 
 GVDB_INCLUDE="$HOME/Desktop/chrono/src/chrono_thirdparty/gvdb-voxels/_output/include"
