@@ -9,7 +9,7 @@ cleanup () {
 trap cleanup SIGINT SIGTERM
 
 # ROS
-# source /opt/ros/humble/setup.sh
+source /root/.bashrc
 
 ## VNC password
 mkdir -p "$HOME/.vnc"
