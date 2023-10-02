@@ -94,10 +94,10 @@ RUN apt-get update && apt-get install -y tigervnc-standalone-server \
 #####################################################
 ADD ./src/ $HOME/src/
 ADD ./desktop/ $HOME/Desktop/
-ADD bashrc /etc/bashrc
+ADD bashrc /root/.bashrc
 # RUN mkdir $HOME/Desktop/chrono/chrono_sensor_ros_node
 # ADD ./chrono_sensor_ros_node/ $HOME/Desktop/chrono/chrono_sensor_ros_node
-RUN chmod a+x $HOME/src/vnc_startup.sh $HOME/src/wm_startup.sh \
+RUN source /root/.bashrc && chmod a+x $HOME/src/vnc_startup.sh $HOME/src/wm_startup.sh \
     && rm -rf /usr/lib/x86_64-linux-gnu/libnvidia-ml.so.1 /usr/lib/x86_64-linux-gnu/libcuda.so.1 /usr/lib/x86_64-linux-gnu/libcudadebugger.so.1
     # && mkdir $HOME/ros-src/image_subscriber/
 # ADD streamer.py $HOME/ros-src/image_subscriber/
