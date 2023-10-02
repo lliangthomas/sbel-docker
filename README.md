@@ -1,2 +1,2 @@
 # SBEL Docker noVNC
-SBEL Docker Containers with Ubuntu 22.04, CUDA 12.1, VNC, and Project Chrono
+SBEL Docker Container with Ubuntu 22.04, CUDA 12.1, VNC, ROS Humble, Project Chrono feature branch with ROS

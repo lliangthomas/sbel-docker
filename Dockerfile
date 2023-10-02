@@ -35,10 +35,10 @@ ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
 # #####################################################
 # # ROS Install
 # #####################################################
-# RUN apt update && apt install -y software-properties-common && add-apt-repository universe -y && apt install -y curl \
-#     && curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg \
-#     && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) main" | tee /etc/apt/sources.list.d/ros2.list > /dev/null \
-#     && apt update && apt upgrade -y && apt install -y ros-humble-desktop python3-rosdep python3-colcon-common-extensions 
+RUN apt update && apt install -y software-properties-common && add-apt-repository universe -y && apt install -y curl \
+    && curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg \
+    && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) main" | tee /etc/apt/sources.list.d/ros2.list > /dev/null \
+    && apt update && apt upgrade -y && apt install -y ros-humble-desktop python3-rosdep python3-colcon-common-extensions 
 
 # #####################################################
 # # ROS Tests
@@ -58,11 +58,18 @@ RUN export LIB_DIR="lib" && export IOMP5_DIR="" \
     && ldconfig && apt-get autoclean -y && apt-get autoremove -y
 
 #####################################################
+# Build Chrono ROS dependencies
+#####################################################
+RUN git clone https://github.com/AaronYoung5/chrono_ros_interfaces.git \
+    && cd chrono_ros_interfaces \ 
+    && colcon build && source install/setup.bash
+
+#####################################################
 # Build Chrono and Install
 #####################################################
 ADD buildChrono.sh /
-ADD chrono-internal $HOME/Desktop/chrono
-# RUN chmod +x /buildChrono.sh && bash /buildChrono.sh
+# ADD chrono-internal $HOME/Desktop/chrono
+RUN chmod +x /buildChrono.sh && bash /buildChrono.sh
 
 #####################################################
 # Visualization and GUI
