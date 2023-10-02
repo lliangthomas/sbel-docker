@@ -57,11 +57,14 @@ RUN export LIB_DIR="lib" && export IOMP5_DIR="" \
     libglew-dev libtinyxml2-dev swig python3-dev libhdf5-dev libnvidia-gl-530 libxxf86vm-dev \
     && ldconfig && apt-get autoclean -y && apt-get autoremove -y
 
+SHELL ["/bin/bash", "-c"]
+
 #####################################################
 # Build Chrono ROS dependencies
 #####################################################
 RUN git clone https://github.com/AaronYoung5/chrono_ros_interfaces.git \
     && cd chrono_ros_interfaces \ 
+    && source /opt/ros/humble/setup.sh \
     && colcon build && source install/setup.bash
 
 #####################################################
