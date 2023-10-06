@@ -97,7 +97,7 @@ RUN apt-get update && apt-get install -y tigervnc-standalone-server \
 #####################################################
 ADD ./src/ $HOME/src/
 ADD ./desktop/ $HOME/Desktop/
-ADD bashrc /root/.bashrc
+ADD bashrc $HOME/.bashrc
 # RUN mkdir $HOME/Desktop/chrono/chrono_sensor_ros_node
 # ADD ./chrono_sensor_ros_node/ $HOME/Desktop/chrono/chrono_sensor_ros_node
 RUN chmod a+x $HOME/src/vnc_startup.sh $HOME/src/wm_startup.sh \
