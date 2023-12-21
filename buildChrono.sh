@@ -1,7 +1,8 @@
 #!/bin/bash
 source /opt/ros/humble/setup.sh
 source /chrono_ros_interfaces/install/setup.bash
-git clone -b feature/ros https://github.com/projectchrono/chrono.git $HOME/Desktop/chrono
+# git clone -b feature/ros https://github.com/projectchrono/chrono.git $HOME/Desktop/chrono
+git clone -b feature/komatsu https://github.com/harryzhang1018/chrono.git $HOME/Desktop/chrono
 cd $HOME/Desktop/chrono
 git submodule init
 git submodule update
@@ -39,7 +40,7 @@ BUILDSYSTEM="Ninja"
 
 cmake -G ${BUILDSYSTEM} -B ${BUILD_DIR} -S ${SOURCE_DIR} \
       -DCMAKE_INSTALL_PREFIX:PATH=${INSTALL_DIR} \
-      -DENABLE_MODULE_IRRLICHT:BOOL=OFF \
+      -DENABLE_MODULE_IRRLICHT:BOOL=ON \
       -DENABLE_MODULE_VSG:BOOL=OFF \
       -DENABLE_MODULE_OPENGL:BOOL=OFF \
       -DENABLE_MODULE_VEHICLE:BOOL=ON \

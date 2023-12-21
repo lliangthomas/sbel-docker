@@ -92,6 +92,21 @@ RUN apt-get update && apt-get install -y tigervnc-standalone-server \
     # Ensure $STARTUPDIR exists
     && mkdir $STARTUPDIR
 
+
+#####################################################
+# A-stack Dependencies
+#####################################################
+RUN apt-get update && apt-get install -y tmux \
+    && apt-get autoclean -y && apt-get autoremove -y
+Run pip3 install keras_core==0.1.3 torch==2.1.1
+Run mkdir $HOME/Desktop/ros2_ws/ \
+    $$ mkdir $HOME/Desktop/ros2_ws/src \
+    && cd $HOME/Desktop/ros2_ws/src/ \
+    && git clone -b feature/TrackedVehicle https://github.com/harryzhang1018/lidar_potential_field_oa.git \
+    && cd $HOME/Desktop/ros2_ws/src/lidar_potential_field_oa && git submodule init && git submodule update \
+    && cd $HOME/Desktop/ros2_ws/ \
+    && colcon build --symlink-install \
+    && source install/setup.bash
 #####################################################
 # Startup and Cleanup
 #####################################################
